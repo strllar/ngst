@@ -6,8 +6,11 @@ import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import sangria.execution.{ErrorWithResolver, Executor, QueryAnalysisError}
 import sangria.execution.deferred.DeferredResolver
 import sangria.parser.QueryParser
+import sangria.renderer.SchemaRenderer
 import spray.json.{JsObject, JsString, JsValue}
 
+import scala.concurrent.{Await, Future}
+import scala.concurrent.duration.Duration
 import scala.util.{Failure, Success}
 
 
@@ -67,4 +70,14 @@ object Server extends App with SprayJsonSupport{
   }
 
   Http().bindAndHandle(route, "0.0.0.0", 8080)
+
+  println(SchemaRenderer.renderSchema(SchemaDefinition.StellarSchema))
+  scala.io.StdIn.readLine("Press Enter to Exit: \n")
+  println("quit confirmed")
+
+  val termsig = Future.sequence(Seq(
+    system.terminate()
+  ))
+  Await.result(termsig, Duration.Inf)
+  println("Done")
 }
