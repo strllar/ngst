@@ -13,5 +13,9 @@ libraryDependencies ++= Seq(
   "org.sangria-graphql" %% "sangria-spray-json" % "1.0.0",
   "com.typesafe.akka" %% "akka-http" % "10.0.5",
   "com.typesafe.akka" %% "akka-http-spray-json" % "10.0.5",
-  "com.typesafe.slick" %% "slick" % "3.2.0"
+  "com.typesafe.slick" %% "slick" % "3.2.0",
+  "org.slf4j" % "slf4j-nop" % "1.6.4",
+  "com.typesafe.slick" %% "slick-hikaricp" % "3.2.0",
+  "org.postgresql" % "postgresql" % "42.0.0"
+  //"com.h2database" % "h2" % "1.4.194"
 )

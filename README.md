@@ -27,11 +27,30 @@ Open http://q.stellar.org in browser.
 # Usecases
 
 ## Get the latest leger
+```
+
+```
 ## Get the ledger was processed in specific timestamp
 ## What is the top N richest address 
 ## Count trusters of an asset
 ## How will the next inflation be distributed?
 
+## Multi Query Operations with fragment 
+```
+query {
+
+  ahahah :ledger(ledgerSeq :0) {
+    ...all
+  }
+  
+  bhahah :lcl {
+    ...all
+  }
+}
+fragment all on Ledger {
+    seq
+}
+```
 ## More
 Happy hacking for your applications or [learn more about GraphQL](http://graphql.org/learn/)
 

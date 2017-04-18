@@ -3,6 +3,7 @@ package org.strllar.ngst
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
+import com.typesafe.config.ConfigFactory
 import sangria.execution.{ErrorWithResolver, Executor, QueryAnalysisError}
 import sangria.execution.deferred.DeferredResolver
 import sangria.parser.QueryParser
@@ -13,6 +14,7 @@ import scala.concurrent.{Await, Future}
 import scala.concurrent.duration.Duration
 import scala.util.{Failure, Success}
 
+import slick.jdbc.PostgresProfile.api.Database
 
 object Server extends App with SprayJsonSupport{
   implicit val system = ActorSystem("sangria-server")
@@ -24,6 +26,9 @@ object Server extends App with SprayJsonSupport{
   import akka.http.scaladsl.model.StatusCodes
   import akka.http.scaladsl.server.Directives._
   import sangria.marshalling.sprayJson._
+
+  val appconfig = ConfigFactory.load().getConfig("ngst")
+  val coredb = Database.forConfig("coredb", appconfig)
 
   val route: Route =
     (post & path("graphql")) {
@@ -54,7 +59,7 @@ object Server extends App with SprayJsonSupport{
 
       // query parsed successfully, time to execute it!
       case Success(queryAst) ⇒
-        complete(Executor.execute(SchemaDefinition.StellarSchema, queryAst, new LedgerHistory,
+        complete(Executor.execute(SchemaDefinition.StellarSchema, queryAst, new LedgerHistory(coredb),
           variables = vars,
           operationName = operation)
           .map(StatusCodes.OK → _)
@@ -76,6 +81,7 @@ object Server extends App with SprayJsonSupport{
   println("quit confirmed")
 
   val termsig = Future.sequence(Seq(
+    Future.apply(coredb.close()),
     system.terminate()
   ))
   Await.result(termsig, Duration.Inf)
