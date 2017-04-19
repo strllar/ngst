@@ -37,19 +37,25 @@ Open http://q.stellar.org in browser.
 
 ## Multi Query Operations with fragment 
 ```
-query {
+{
+  genesisLedger: ledger(ledgerSeq: 0) {
+    ...all
+  }
+  latestLedger: lcl {
+    ...all
+  }
+}
 
-  ahahah :ledger(ledgerSeq :0) {
-    ...all
-  }
-  
-  bhahah :lcl {
-    ...all
-  }
-}
 fragment all on Ledger {
-    seq
+  closeAt,
+  header {
+    ledgerhash    
+    ledgerseq
+    closetime
+    data
+  }
 }
+
 ```
 ## More
 Happy hacking for your applications or [learn more about GraphQL](http://graphql.org/learn/)

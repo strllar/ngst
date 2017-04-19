@@ -59,7 +59,7 @@ object Server extends App with SprayJsonSupport{
 
       // query parsed successfully, time to execute it!
       case Success(queryAst) ⇒
-        complete(Executor.execute(SchemaDefinition.StellarSchema, queryAst, new LedgerHistory(coredb),
+        complete(Executor.execute(SchemaDefinition.StellarSchema, queryAst, new StellarTome(coredb),
           variables = vars,
           operationName = operation)
           .map(StatusCodes.OK → _)
