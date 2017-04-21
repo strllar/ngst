@@ -6,6 +6,10 @@ package org.strllar.ngst.evidences
 
 import slick.jdbc.PostgresProfile.api._
 
+object StellarCoreXDR {
+
+}
+
 object StellarCoreDB {
 
   case class LedgerHeader(ledgerhash :String, prevhash :String, bucketlisthash :String, ledgerseq :Int, closetime :Long, data :String)
