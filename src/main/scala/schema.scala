@@ -14,9 +14,11 @@ object SchemaDefinition {
     "IAccountingSubject",
     "Accounting subject in ledger",
     () => fields[StellarTome, StellarTome.AccountingSubject](
-      Field("totalAmount", LongType,
+      Field("totalAmount", BigDecimalType,
         description = Some("total amount of XLM"),
-        resolve = _.value.totalAmount)
+        resolve = (x) => {
+          BigDecimal(x.value.totalAmount) / 10000000
+        })
     )
   )
 
@@ -56,7 +58,7 @@ object SchemaDefinition {
       Field("numsubentries", IntType,
         description = Some("as name"),
         resolve = _.value.solo.numsubentries),
-      Field("inflationdest", StringType,
+      Field("inflationdest", OptionType(StringType),
         description = Some("as name"),
         resolve = _.value.solo.inflationdest),
       Field("homedomain", StringType,
@@ -87,7 +89,11 @@ object SchemaDefinition {
         resolve = _.value),
       Field("birthLedger", OLedgerFusion,
         description = Some("The ledger in which this account created"),
-        resolve =  _.ctx.getLCL.map(StellarTome.LedgerFusion))
+        resolve =  (x) => {
+          x.ctx.getLedger((x.value.solo.seqnum >>> 32).toInt).map( y=>
+            (y map StellarTome.LedgerFusion).get
+          )
+        })
     )
   )
 

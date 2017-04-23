@@ -23,13 +23,13 @@ object StellarCoreDB {
     def * = (ledgerhash, prevhash, bucketlisthash, ledgerseq, closetime, data) <> (LedgerHeader.tupled, LedgerHeader.unapply)
   }
 
-  case class Account(accountid :String, balance :Long, seqnum :Long, numsubentries :Int, inflationdest :String, homedomain :String, thresholds :String, flags :Int, lastmodified :Int)
+  case class Account(accountid :String, balance :Long, seqnum :Long, numsubentries :Int, inflationdest :Option[String], homedomain :String, thresholds :String, flags :Int, lastmodified :Int)
   class accounts(tag: Tag) extends Table[Account](tag, "accounts") {
     def accountid = column[String]("accountid")
     def balance = column[Long]("balance")
     def seqnum = column[Long]("seqnum")
     def numsubentries = column[Int]("numsubentries")
-    def inflationdest = column[String]("inflationdest")
+    def inflationdest = column[Option[String]]("inflationdest") //nullable in both db scheme and xdr
     def homedomain = column[String]("homedomain")
     def thresholds = column[String]("thresholds")
     def flags = column[Int]("flags")
