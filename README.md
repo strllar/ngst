@@ -22,7 +22,7 @@ $sbt run
 Then open http://127.0.0.1:8080/ in browser
 
 ## quickstart
-Open http://q.stellar.org in browser.
+Open http://q.strllar.org in browser.
 
 # Usecases
 
